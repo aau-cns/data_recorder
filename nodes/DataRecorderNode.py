@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Copyright (C) 2021 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
 #
 # All rights reserved.
@@ -70,7 +71,6 @@ class DataRecorderNode(object):
             if self.__f_is_recording:
                 # started & start (do nothing)
                 rospy.logwarn("already recording -- doing nothing")
-                res_value = True
             else:
                 # stopped & start (start recording)
                 # debug output
@@ -79,6 +79,7 @@ class DataRecorderNode(object):
                     pass
 
                 # set action to start observation
+                res_value = True
                 action = RecorderAction.START
                 pass
             pass
@@ -92,12 +93,12 @@ class DataRecorderNode(object):
                     pass
 
                 # set action to stop recording
+                res_value = True
                 action = RecorderAction.STOP
                 pass
             else:
                 # stopped & stop (do nothing)
                 rospy.logwarn("already stopped -- doing nothing")
-                res_value = True
                 pass
             pass
 
@@ -105,10 +106,12 @@ class DataRecorderNode(object):
         if action == RecorderAction.START:
             res_value = self.__recorder.start_recording()
             self.__f_is_recording = True
+            res_value = True
             pass
         elif action == RecorderAction.STOP:
             res_value = self.__recorder.stop_recording()
             self.__f_is_recording = False
+            res_value = True
             pass
         else:
             # doing nothing
