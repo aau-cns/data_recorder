@@ -32,6 +32,7 @@ class DataRecorderNode(object):
     def __init__(self):
         # ROS parameters
         self.record_script_file = rospy.get_param("~record_script", "")
+        self.record_script_cmd = rospy.get_param("~record_cmd", "")
         self.__b_verbose = rospy.get_param("~verbose", True)
 
         # debug
@@ -49,6 +50,7 @@ class DataRecorderNode(object):
         # create recorder
         self.__recorder = DataRecorder(
             record_script_file=self.record_script_file,
+            record_command=self.record_script_cmd,
             verbose=self.__b_verbose,
         )
         pass  # def __init__()

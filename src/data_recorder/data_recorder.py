@@ -17,12 +17,14 @@ class DataRecorder(object):
 
     def __init__(self,
                  record_script_file,                        # type: str
+                 record_command,                            # type: str
                  verbose=False,                             # type: bool
                  ):
 
         # set parameters
         self.__script_file = record_script_file             # type: str
-        self.__f_scipt_valid = self.__check_script_path()   # type: bool
+        self.__record_cmd = record_command                  # type: str
+        self.__f_script_valid = self.__check_script_path()  # type: bool
         self.__b_verbose = verbose                          # type: bool
 
         # setup process parameters
@@ -41,7 +43,7 @@ class DataRecorder(object):
     def start_recording(self):
         # type: (...) -> bool
 
-        if not self.__f_scipt_valid:
+        if not self.__f_script_valid:
             # script could not be found, return false
             return False
             pass
@@ -51,7 +53,7 @@ class DataRecorder(object):
         # do not start this with 'shell=True' if not necessary, otherwise you have to close also all subprocesses
         # see here for more information:
         #       https://answers.ros.org/question/10714/start-and-stop-rosbag-within-a-python-script/
-        self.__proc_record = subprocess.Popen(self.__script_file)
+        self.__proc_record = subprocess.Popen([self.__script_file, self.__record_cmd])
 
         # debug
         if self.__b_verbose:

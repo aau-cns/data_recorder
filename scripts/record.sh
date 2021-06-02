@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "[BASH] Called 'record.sh'"
+echo "[BASH] Called 'record.sh' with argument ${1}"
 
 # perform while loop with sleeps of 2s (max of 2000s
 COUNTER=0
