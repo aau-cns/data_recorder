@@ -16,23 +16,27 @@ import typing as typ
 class DataRecorder(object):
 
     def __init__(self,
-                 record_script_file,                        # type: str
-                 record_command,                            # type: str
-                 verbose=False,                             # type: bool
+                 record_script_file,                            # type: str
+                 record_command,                                # type: str
+                 data_storage_script_file,                      # type: str
+                 storage_command,                               # type: str
+                 verbose=False,                                 # type: bool
                  ):
 
         # set parameters
-        self.__script_file = record_script_file             # type: str
-        self.__record_cmd = record_command                  # type: str
-        self.__f_script_valid = self.__check_script_path()  # type: bool
-        self.__b_verbose = verbose                          # type: bool
+        self.__rec_script_file = record_script_file             # type: str
+        self.__store_script_file = data_storage_script_file     # type: str
+        self.__record_cmd = record_command                      # type: str
+        self.__store_cmd = storage_command                      # type: str
+        self.__f_script_valid = self.__check_script_path()      # type: bool
+        self.__b_verbose = verbose                              # type: bool
 
         # setup process parameters
-        self.__proc_record = None                           # type: typ.Optional[int]
+        self.__proc_record = None                               # type: typ.Optional[int]
 
         # setup status variables (used for debugging)
-        self.__is_recording = False                         # type: bool
-        self.__status_msg = "STOP: record not started"      # type: str
+        self.__is_recording = False                             # type: bool
+        self.__status_msg = "STOP: record not started"          # type: str
 
         # debug
         if self.__b_verbose:
@@ -45,6 +49,7 @@ class DataRecorder(object):
 
         if not self.__f_script_valid:
             # script could not be found, return false
+            print("[RECORD] record script file not valid (%s)" % self.__rec_script_file)
             return False
             pass
 
@@ -53,12 +58,8 @@ class DataRecorder(object):
         # do not start this with 'shell=True' if not necessary, otherwise you have to close also all subprocesses
         # see here for more information:
         #       https://answers.ros.org/question/10714/start-and-stop-rosbag-within-a-python-script/
-        self.__proc_record = subprocess.Popen([self.__script_file, self.__record_cmd])
-
-        # debug
-        if self.__b_verbose:
-            print("[RECORD] started recording with PID %d" % self.__proc_record.pid)
-            pass
+        self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd])
+        print("[RECORD] started recording with PID %d" % self.__proc_record.pid)
 
         # started successfully: set status to recording
         self.__status_msg = "REC:  recording data"
@@ -84,8 +85,19 @@ class DataRecorder(object):
             print("[RECORD] terminated recording")
             pass
 
+        # perform data merging to storage location
+        proc_store = subprocess.Popen([self.__store_script_file, self.__store_cmd])
+        print("[RECORD] started data storing with  PID %d" % proc_store.pid)
+        try:
+            proc_store.wait()  # TODO(scm): set timeout here
+        except subprocess.TimeoutExpired:
+            print("[RECORD] could not finish data merging within timeout")
+            # INFO(scm): we are not changing return value here
+            proc_store.terminate()
+            pass
+
         # stopped successfully: set status to stopped
-        self.__status_msg = "STOP: record not started"
+        self.__status_msg = "STOP: stopped recording"
         self.__is_recording = False
         return True  # successfully stopped recording
         pass
@@ -93,11 +105,11 @@ class DataRecorder(object):
     def __check_script_path(self):
         # type: (...) -> bool
         """checks if the record script file exists"""
-        if os.path.isfile(self.__script_file):
-            self.__status_msg = "OK:   record file %s found" % self.__script_file
+        if os.path.isfile(self.__rec_script_file):
+            self.__status_msg = "OK:   record file %s found" % self.__rec_script_file
             return True
         else:
-            self.__status_msg = "ERR:  record file %s NOT found" % self.__script_file
+            self.__status_msg = "ERR:  record file %s NOT found" % self.__rec_script_file
             return False
         pass  # def __check_script_path()
 

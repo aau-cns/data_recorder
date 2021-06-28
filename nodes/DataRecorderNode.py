@@ -32,7 +32,9 @@ class DataRecorderNode(object):
     def __init__(self):
         # ROS parameters
         self.record_script_file = rospy.get_param("~record_script", "")
+        self.store_script_file = rospy.get_param("~store_script", "")
         self.record_script_cmd = rospy.get_param("~record_cmd", "")
+        self.store_script_cmd = rospy.get_param("~store_cmd", "")
         self.__b_verbose = rospy.get_param("~verbose", True)
 
         # debug
@@ -51,6 +53,8 @@ class DataRecorderNode(object):
         self.__recorder = DataRecorder(
             record_script_file=self.record_script_file,
             record_command=self.record_script_cmd,
+            data_storage_script_file=self.store_script_file,
+            storage_command=self.store_script_cmd,
             verbose=self.__b_verbose,
         )
         pass  # def __init__()
@@ -66,7 +70,7 @@ class DataRecorderNode(object):
         res_value = False                               # type: bool
         action = RecorderAction.NOTHING                 # type: RecorderAction
 
-        # check wether record start or stop was requested
+        # check whether record start or stop was requested
         if req.data:
             # start requested, check if not started otherwise start
 
@@ -81,7 +85,6 @@ class DataRecorderNode(object):
                     pass
 
                 # set action to start observation
-                res_value = True
                 action = RecorderAction.START
                 pass
             pass
@@ -95,7 +98,6 @@ class DataRecorderNode(object):
                     pass
 
                 # set action to stop recording
-                res_value = True
                 action = RecorderAction.STOP
                 pass
             else:
@@ -113,10 +115,11 @@ class DataRecorderNode(object):
         elif action == RecorderAction.STOP:
             res_value = self.__recorder.stop_recording()
             self.__f_is_recording = False
-            res_value = True
+            res_value = True  # TODO(scm): hardcoded but not checked by autonomy
             pass
         else:
             # doing nothing
+            res_value = True
             pass
 
         # setup response message
