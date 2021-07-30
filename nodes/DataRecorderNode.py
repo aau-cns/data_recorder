@@ -33,6 +33,7 @@ class DataRecorderNode(object):
         # ROS parameters
         self.record_script_file = rospy.get_param("~record_script", "")
         self.store_script_file = rospy.get_param("~store_script", "")
+        self.record_stop_file = rospy.get_param("~record_stop", "")
         self.record_script_cmd = rospy.get_param("~record_cmd", "")
         self.store_script_cmd = rospy.get_param("~store_cmd", "")
         self.__b_verbose = rospy.get_param("~verbose", True)
@@ -53,6 +54,7 @@ class DataRecorderNode(object):
         self.__recorder = DataRecorder(
             record_script_file=self.record_script_file,
             record_command=self.record_script_cmd,
+            record_stop_file=self.record_stop_file,
             data_storage_script_file=self.store_script_file,
             storage_command=self.store_script_cmd,
             verbose=self.__b_verbose,

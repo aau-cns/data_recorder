@@ -9,7 +9,7 @@
 # You can contact the author at <martin.scheiber@ieee.org>
 
 import subprocess
-import os
+import os, signal
 import typing as typ
 
 
@@ -18,6 +18,7 @@ class DataRecorder(object):
     def __init__(self,
                  record_script_file,                            # type: str
                  record_command,                                # type: str
+                 record_stop_file,                              # type: str
                  data_storage_script_file,                      # type: str
                  storage_command,                               # type: str
                  verbose=False,                                 # type: bool
@@ -26,6 +27,7 @@ class DataRecorder(object):
         # set parameters
         self.__rec_script_file = record_script_file             # type: str
         self.__store_script_file = data_storage_script_file     # type: str
+        self.__record_stop_file = record_stop_file              # type: str
         self.__record_cmd = record_command                      # type: str
         self.__store_cmd = storage_command                      # type: str
         self.__f_script_valid = self.__check_script_path()      # type: bool
@@ -58,7 +60,8 @@ class DataRecorder(object):
         # do not start this with 'shell=True' if not necessary, otherwise you have to close also all subprocesses
         # see here for more information:
         #       https://answers.ros.org/question/10714/start-and-stop-rosbag-within-a-python-script/
-        self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd])
+        # self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd])
+        self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd], preexec_fn=os.setsid)
         print("[RECORD] started recording with PID %d" % self.__proc_record.pid)
 
         # started successfully: set status to recording
@@ -78,7 +81,21 @@ class DataRecorder(object):
 
         # otherwise send SIGINT or stop it with another method
         # TODO(scm): stop process
-        self.__proc_record.terminate()
+        # self.__proc_record.terminate()
+        # kill process group rather than just the parent process
+        pgid = os.getpgid(self.__proc_record.pid)
+        print("[RECORD] terminating group %d" % pgid)
+
+        os.killpg(pgid, signal.SIGTERM)
+        # # needs to be send twice for GNU Parallel
+        os.killpg(pgid, signal.SIGTERM)
+
+        # make sure records are killed
+        if self.__b_verbose:
+            print("[RECORD] stopping remaining recording nodes")
+            pass
+        kill_record_proc = subprocess.Popen([self.__record_stop_file], shell=True)
+        kill_record_proc.wait()
 
         # debug
         if self.__b_verbose:

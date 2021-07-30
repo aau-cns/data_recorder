@@ -2,6 +2,7 @@
 <launch>
     <arg name="record_script"   default="$(find data_recorder)/scripts/record.sh" />
     <arg name="record_cmd"      default="dev1_full" />
+    <arg name="record_stop"     default="$(find data_recorder)/scripts/stop_record.sh" />
     <arg name="store_script"    default="$(find data_recorder)/scripts/store.sh" />
     <arg name="store_cmd"       default="" />
     <arg name="verbose"         default="true" />
@@ -9,6 +10,7 @@
     <node name="data_recorder" pkg="data_recorder" type="DataRecorderNode.py" output="screen" respawn="true">
         <param name="record_script" value="$(arg record_script)" />
         <param name="record_cmd"    value="$(arg record_cmd)" />
+        <param name="record_stop"   value="$(arg record_stop)" />
         <param name="store_script"  value="$(arg store_script)" />
         <param name="store_cmd"     value="$(arg store_cmd)" />
         <param name="verbose"       value="$(arg verbose)" />
