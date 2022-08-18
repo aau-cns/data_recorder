@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Copyright (C) 2022 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
+
+  All rights reserved.
+
+  This software is licensed under the terms of the BSD-2-Clause-License with
+  no commercial use allowed, the full terms of which are made available
+  in the LICENSE file. No license in patents is granted.
+
+  You can contact the author at <martin.scheiber@ieee.org>
+-->
+
 <launch>
     <arg name="record_script"   default="$(find data_recorder)/scripts/record.sh" />
     <arg name="record_cmd"      default="dev1_full" />
     <arg name="record_stop"     default="$(find data_recorder)/scripts/stop_record.sh" />
     <arg name="store_script"    default="$(find data_recorder)/scripts/store.sh" />
     <arg name="store_cmd"       default="" />
-    <arg name="verbose"         default="true" />
+    <arg name="verbose"         default="false" />
 
     <node name="data_recorder" pkg="data_recorder" type="DataRecorderNode.py" output="screen" respawn="true">
         <param name="record_script" value="$(arg record_script)" />

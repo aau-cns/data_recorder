@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (C) 2021 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
+# Copyright (C) 2022 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
 #
 # All rights reserved.
 #
@@ -36,7 +36,7 @@ class DataRecorderNode(object):
         self.record_stop_file = rospy.get_param("~record_stop", "")
         self.record_script_cmd = rospy.get_param("~record_cmd", "")
         self.store_script_cmd = rospy.get_param("~store_cmd", "")
-        self.__b_verbose = rospy.get_param("~verbose", True)
+        self.__b_verbose = rospy.get_param("~verbose", False)
 
         # debug
         if self.__b_verbose:
