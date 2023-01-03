@@ -1,27 +1,32 @@
 # CNS Flight Stack: Data Recorder ROS1 Package (data_recorder)
 
-[![License](https://img.shields.io/badge/License-AAUCNS-green.svg)](./LICENSE)
+[![License](https://img.shields.io/badge/License-AAUCNS-336B81.svg)](./LICENSE) [![Paper](https://img.shields.io/badge/IEEEXplore-10.1109/LRA.2022.3196117-00629B.svg?logo=ieee)](https://doi.org/10.1109/LRA.2022.3196117) [![Release](https://img.shields.io/github/v/release/aau-cns/data_recorder?include_prereleases&logo=github)](https://github.com/aau-cns/data_recorder/releases)
+
+Maintainer: [Martin Scheiber](mailto:martin.scheiber@aau.at)
 
 A ROS wrapper to communicate via ROS services to start execution of data recording scripts and data storing scripts.
 
+## Credit
+This code was written by the [Control of Networked System (CNS)](https://www.aau.at/en/smart-systems-technologies/control-of-networked-systems/), University of Klagenfurt, Klagenfurt, Austria.
+
 ## License
-This software is made available to the public to use (_source-available_),
-licensed under the terms of the BSD-2-Clause-License with no commercial use
-allowed, the full terms of which are made available in the `LICENSE` file.
-No license in patents is granted.
+This software is made available to the public to use (_source-available_), licensed under the terms of the BSD-2-Clause-License with no commercial use allowed, the full terms of which are made available in the `LICENSE` file. No license in patents is granted.
 
 ### Usage for academic purposes
 If you use this software in an academic research setting, please cite the
 corresponding paper and consult the `LICENSE` file for a detailed explanation.
 
 ```latex
-@inproceedings{cns_flight_stack22,
-   author   = {Martin Scheiber and Alessandro Fornasier and Roland Jung and Christoph Boehm and Rohit Dhakate
-               and Christian Stewart and Jan Steinbrener and Stephan Weiss and Christian Brommer},
-   journal  = {IEEE Robotics and Automation Letters},
-   title    = {CNS Flight Stack for Reproducible, Customizable, and Fully Autonomous Applications},
-   year     = {2022},
-   doi      = {10.1109/LRA.2022.3196117}
+@article{cns_flightstack22,
+    title        = {CNS Flight Stack for Reproducible, Customizable, and Fully Autonomous Applications},
+    author       = {Scheiber, Martin and Fornasier, Alessandro and Jung, Roland and Böhm, Christoph and Dhakate, Rohit and Stewart, Christian and Steinbrener, Jan and Weiss, Stephan and Brommer, Christian},
+    journal      = {IEEE Robotics and Automation Letters},
+    volume       = {7},
+    number       = {4},
+    year         = {2022},
+    doi          = {10.1109/LRA.2022.3196117},
+    url          = {https://ieeexplore.ieee.org/document/9849131},
+    pages        = {11283--11290}
 }
 ```
 
