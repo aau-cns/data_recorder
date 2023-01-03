@@ -28,10 +28,18 @@ class DataRecorder(object):
         self.__rec_script_file = record_script_file             # type: str
         self.__store_script_file = data_storage_script_file     # type: str
         self.__record_stop_file = record_stop_file              # type: str
-        self.__record_cmd = record_command                      # type: str
-        self.__store_cmd = storage_command                      # type: str
         self.__f_script_valid = self.__check_script_path()      # type: bool
         self.__b_verbose = verbose                              # type: bool
+
+        # split the script commands into lists
+        self.__record_cmd = record_command.split(' ')           # type: typ.List[str]
+        self.__store_cmd = storage_command.split(' ')           # type: typ.List[str]
+
+        # setup process arguments
+        self.__proc_rec_args = [self.__rec_script_file]
+        self.__proc_rec_args.extend(self.__record_cmd)
+        self.__proc_store_args = [self.__store_script_file]
+        self.__proc_store_args.extend(self.__store_cmd)
 
         # setup process parameters
         self.__proc_record = None                               # type: typ.Optional[int]
@@ -61,7 +69,7 @@ class DataRecorder(object):
         # see here for more information:
         #       https://answers.ros.org/question/10714/start-and-stop-rosbag-within-a-python-script/
         # self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd])
-        self.__proc_record = subprocess.Popen([self.__rec_script_file, self.__record_cmd], preexec_fn=os.setsid)
+        self.__proc_record = subprocess.Popen(self.__proc_rec_args, preexec_fn=os.setsid)
         print("[RECORD] started recording with PID %d" % self.__proc_record.pid)
 
         # started successfully: set status to recording
@@ -103,7 +111,7 @@ class DataRecorder(object):
             pass
 
         # perform data merging to storage location
-        proc_store = subprocess.Popen([self.__store_script_file, self.__store_cmd])
+        proc_store = subprocess.Popen(self.__proc_store_args)
         print("[RECORD] started data storing with  PID %d" % proc_store.pid)
         try:
             proc_store.wait()  # TODO(scm): set timeout here

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2022 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
+# Copyright (C) 2023 Martin Scheiber, Control of Networked Systems, University of Klagenfurt, Austria.
 #
 # All rights reserved.
 #
@@ -9,7 +9,10 @@
 #
 # You can contact the author at <martin.scheiber@ieee.org>
 
-echo "[BASH] Called 'store.sh' with argument ${1}"
+echo "[BASH] Called 'store.sh' with arguments"
+echo "       1: ${1}"
+echo "       2: ${3}"
+echo "       3: ${2}"
 
 # perform while loop with sleeps of 1s (max of 10s)
 COUNTER=0
