@@ -110,13 +110,13 @@ class DataRecorderNode(object):
 
         # check for action and perform action
         if action == RecorderAction.START:
-            res_value = self.__recorder.start_recording()
             self.__f_is_recording = True
+            res_value = self.__recorder.start_recording()
             res_value = True
             pass
         elif action == RecorderAction.STOP:
-            res_value = self.__recorder.stop_recording()
             self.__f_is_recording = False
+            res_value = self.__recorder.stop_recording()
             res_value = True  # TODO(scm): hardcoded but not checked by autonomy
             pass
         else:
