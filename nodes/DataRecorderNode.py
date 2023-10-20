@@ -45,7 +45,7 @@ class DataRecorderNode(object):
 
         # declare ROS services
         self.record_srv = rospy.Service(
-            '/data_recorder/record', BoolService, self.__handle_record_service)
+            'data_recorder/record', BoolService, self.__handle_record_service)
 
         # setup flags
         self.__f_is_recording = False                   # type: bool
